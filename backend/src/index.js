@@ -26,8 +26,11 @@ if (!fs.existsSync(uploadsDir)) {
 // Serve static upload files
 app.use('/uploads', express.static(uploadsDir));
 
-// Logging middleware
+// Logging & Path Prefix Adapter middleware
 app.use((req, res, next) => {
+  if (req.url.startsWith('/api/backend')) {
+    req.url = req.url.replace('/api/backend', '/api');
+  }
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
 });

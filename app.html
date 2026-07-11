@@ -1,0 +1,1496 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  #ngo-hub-root {
+    --ink: #26261f;
+    --paper: #f6f3ec;
+    --indigo: #22385a;
+    --indigo-deep: #16263d;
+    --marigold: #dd9a2e;
+    --moss: #4c6e50;
+    --coral: #b64d38;
+    --line: #ddd6c4;
+    font-family: 'Public Sans', sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  #ngo-hub-root * { box-sizing: border-box; }
+  #ngo-hub-root h1, #ngo-hub-root h2, #ngo-hub-root h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    margin: 0;
+    color: var(--indigo-deep);
+  }
+  .nh-shell { display: flex; min-height: 620px; }
+  .nh-nav {
+    width: 190px;
+    background: var(--indigo-deep);
+    padding: 20px 12px;
+    flex-shrink: 0;
+  }
+  .nh-brand { display: flex; align-items: center; gap: 8px; padding: 0 8px 18px; border-bottom: 1px solid rgba(255,255,255,0.12); margin-bottom: 14px; }
+  .nh-seal { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--marigold); display: flex; align-items: center; justify-content: center; color: var(--marigold); font-family: 'Fraunces', serif; font-size: 13px; flex-shrink: 0; }
+  .nh-brand span { font-family: 'Fraunces', serif; color: #f6f3ec; font-size: 15px; font-weight: 600; }
+  .nh-tab {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px; border-radius: 8px; margin-bottom: 3px;
+    color: #cfd3d9; font-size: 13px; cursor: pointer; user-select: none;
+    border: none; background: transparent; width: 100%; text-align: left;
+    font-family: 'Public Sans', sans-serif;
+  }
+  .nh-tab i { font-size: 16px; width: 16px; }
+  .nh-tab:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nh-tab.active { background: var(--marigold); color: var(--indigo-deep); font-weight: 600; }
+  .nh-main { flex: 1; padding: 26px 30px; overflow-y: auto; max-height: 680px; }
+  .nh-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--moss); margin-bottom: 4px; display: block; }
+  .nh-lede { color: #6b6a5f; font-size: 13.5px; margin-top: 6px; line-height: 1.55; max-width: 520px; }
+  .nh-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-top: 16px; }
+  .nh-field { margin-bottom: 12px; }
+  .nh-field label { display: block; font-size: 12.5px; color: #6b6a5f; margin-bottom: 4px; font-weight: 500; }
+  .nh-field input, .nh-field select, .nh-field textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px;
+    font-family: 'Public Sans', sans-serif; font-size: 13.5px; background: #fdfcf9; color: var(--ink);
+  }
+  .nh-field textarea { resize: vertical; min-height: 60px; }
+  .nh-row { display: flex; gap: 12px; }
+  .nh-row > .nh-field { flex: 1; }
+  .nh-btn {
+    background: var(--indigo); color: #fff; border: none; padding: 9px 18px;
+    border-radius: 7px; font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: 'Public Sans', sans-serif;
+  }
+  .nh-btn:hover { background: var(--indigo-deep); }
+  .nh-btn.ghost { background: transparent; color: var(--indigo); border: 1px solid var(--indigo); }
+  .nh-btn.mini { padding: 5px 10px; font-size: 12px; }
+  .nh-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px; font-family: 'IBM Plex Mono', monospace; }
+  .nh-badge.pending { background: #f3e6cd; color: #8a5f16; }
+  .nh-badge.verified { background: #dbe7dc; color: var(--moss); }
+  .nh-badge.rejected { background: #f2dcd6; color: var(--coral); }
+  .nh-list-item { border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 12px 14px; margin-top: 10px; }
+  .nh-list-item h4 { font-family: 'Public Sans', sans-serif; font-weight: 600; font-size: 13.5px; margin: 0 0 3px; color: var(--ink); }
+  .nh-list-item p { margin: 0; font-size: 12.5px; color: #6b6a5f; }
+  .nh-empty { text-align: center; padding: 30px 20px; color: #9a9888; font-size: 13px; border: 1px dashed var(--line); border-radius: 10px; margin-top: 16px; }
+  .nh-chat-log { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; padding: 4px 2px; }
+  .nh-msg { max-width: 78%; padding: 9px 13px; border-radius: 10px; font-size: 13.5px; line-height: 1.5; }
+  .nh-msg.user { align-self: flex-end; background: var(--indigo); color: #fff; border-bottom-right-radius: 3px; }
+  .nh-msg.agent { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 3px; }
+  .nh-chat-input-row { display: flex; gap: 8px; margin-top: 12px; }
+  .nh-chat-input-row input { flex: 1; padding: 9px 12px; border: 1px solid var(--line); border-radius: 20px; font-size: 13.5px; font-family: 'Public Sans', sans-serif; }
+  .nh-mic-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--indigo); flex-shrink: 0; }
+  .nh-mic-btn.rec { background: var(--coral); color: #fff; border-color: var(--coral); }
+  .nh-lang-select { font-size: 12px; padding: 5px 8px; border-radius: 6px; border: 1px solid var(--line); font-family: 'Public Sans', sans-serif; }
+  .nh-stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 16px; }
+  .nh-stat { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 14px; text-align: center; }
+  .nh-stat b { font-family: 'Fraunces', serif; font-size: 22px; display: block; color: var(--indigo-deep); }
+  .nh-stat span { font-size: 11px; color: #9a9888; }
+  .nh-note { font-size: 11.5px; color: #9a9888; margin-top: 10px; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+</style>
+
+<div id="ngo-hub-root">
+  <div class="nh-shell">
+    <div class="nh-nav" id="nh-nav"></div>
+    <div class="nh-main" id="nh-main"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const TABS = [
+    { id: 'register', icon: 'ti-clipboard-text', label: 'NGO registration' },
+    { id: 'agent', icon: 'ti-message-circle-2', label: 'AI agent' },
+    { id: 'funders', icon: 'ti-target-arrow', label: 'Funders & applications' },
+    { id: 'donations', icon: 'ti-gift', label: 'Donations' },
+    { id: 'collab', icon: 'ti-building-community', label: 'Org collaboration' },
+    { id: 'jobs', icon: 'ti-briefcase', label: 'Jobs and internships' },
+    { id: 'events', icon: 'ti-calendar-event', label: 'Events' },
+    { id: 'directory', icon: 'ti-list-details', label: 'Public NGO directory' },
+    { id: 'admin-hub', icon: 'ti-shield-check', label: 'Admin hub' },
+  ];
+  let active = 'register';
+  let role = null;
+  let ngoProfile = null;
+  let citizenProfile = null;
+  let orgProfile = null;
+  let chatLog = [];
+  let language = 'te';
+  let listening = false;
+  let audioOn = true;
+  let citizenMode = 'register';
+  let orgMode = 'register';
+  let citizenLoginError = '';
+  let orgLoginError = '';
+  let citizenRegStep = 'form'; // 'form' | 'otp'
+  let citizenOtp = null;
+  let citizenPendingProfile = null;
+  let citizenOtpError = '';
+  let adminAuthed = false;
+  let adminPasscodeError = '';
+  const ADMIN_PASSCODE = 'NIVARA-ADMIN';
+  let registerFormError = '';
+  let adminNgoAssessments = {};
+  let adminOrgAssessments = {};
+  let adminFunderCache = null;
+  let fundersDirCache = null;
+  let fundersMatchCache = null;
+  let fundersMatchNotice = '';
+  let liveFundersCache = null;
+  let liveFundersLoading = false;
+  let liveFundersNotice = '';
+  let currentDraft = null;
+  let myApplicationsCache = null;
+
+  const ROLE_META = {
+    ngo: { label: 'NGO', icon: 'ti-building-bank', desc: 'Register, get verified, and access the AI funding agent.' },
+    citizen: { label: 'Citizen', icon: 'ti-user', desc: 'Donate items and browse verified NGOs.' },
+    org: { label: 'Organization', icon: 'ti-building-community', desc: 'Get verified, offer CSR collaboration, host events, post openings, and donate.' },
+    admin: { label: 'Admin', icon: 'ti-shield-check', desc: 'Review and verify NGO and organization submissions.' },
+  };
+  const ROLE_TABS = {
+    ngo: ['agent', 'funders', 'donations', 'collab', 'jobs', 'events', 'directory'],
+    citizen: ['donations', 'jobs', 'directory'],
+    org: ['collab', 'jobs', 'events', 'donations', 'directory'],
+    admin: ['admin-hub'],
+  };
+  function isAuthed() {
+    if (role === 'ngo') return !!(ngoProfile && ngoProfile.status === 'verified');
+    if (role === 'citizen') return !!citizenProfile;
+    if (role === 'org') return !!(orgProfile && orgProfile.status === 'verified');
+    if (role === 'admin') return !!adminAuthed;
+    return false;
+  }
+  function preAuthTab() {
+    if (role === 'ngo') return 'register';
+    if (role === 'citizen') return 'citizen-login';
+    if (role === 'org') return 'org-login';
+    if (role === 'admin') return 'admin-login';
+    return null;
+  }
+
+  const LANGS = {
+    te: { label: 'తెలుగు', speech: 'te-IN', name: 'Telugu' },
+    hi: { label: 'हिन्दी', speech: 'hi-IN', name: 'Hindi' },
+    en: { label: 'English', speech: 'en-IN', name: 'English' },
+    ta: { label: 'தமிழ்', speech: 'ta-IN', name: 'Tamil' },
+    kn: { label: 'ಕನ್ನಡ', speech: 'kn-IN', name: 'Kannada' },
+    mr: { label: 'मराठी', speech: 'mr-IN', name: 'Marathi' },
+    bn: { label: 'বাংলা', speech: 'bn-IN', name: 'Bengali' },
+    gu: { label: 'ગુજરાતી', speech: 'gu-IN', name: 'Gujarati' },
+    pa: { label: 'ਪੰਜਾਬੀ', speech: 'pa-IN', name: 'Punjabi' },
+    ur: { label: 'اردو', speech: 'ur-IN', name: 'Urdu' },
+  };
+
+  function speakText(text) {
+    if (!audioOn || !window.speechSynthesis) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = LANGS[language].speech;
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.lang === LANGS[language].speech) || voices.find(v => v.lang.startsWith(language));
+      if (match) utter.voice = match;
+      window.speechSynthesis.speak(utter);
+    } catch(e) { console.error(e); }
+  }
+  window.nhSpeak = (i) => { const m = chatLog[i]; if (m) speakText(m.text); };
+
+  const nav = document.getElementById('nh-nav');
+  const main = document.getElementById('nh-main');
+
+  function render() {
+    if (!role) {
+      nav.innerHTML = `<div class="nh-brand"><div class="nh-seal">N</div><span>NIVARA</span></div>`;
+      main.innerHTML = roleGateView();
+      bindRoleGate();
+      return;
+    }
+    const authed = isAuthed();
+    const tabIds = authed ? ROLE_TABS[role] : [preAuthTab()];
+    if (!tabIds.includes(active)) active = tabIds[0];
+    const loginLabels = { 'citizen-login': { icon: 'ti-login-2', label: 'Citizen login' }, 'org-login': { icon: 'ti-login-2', label: 'Organization login' }, 'admin-login': { icon: 'ti-login-2', label: 'Admin login' } };
+    nav.innerHTML = `
+      <div class="nh-brand"><div class="nh-seal">N</div><span>NIVARA</span></div>
+      <div style="font-size:10.5px;color:#9099a8;padding:0 8px 10px;text-transform:uppercase;letter-spacing:.05em;">${ROLE_META[role].label} account</div>
+      ${tabIds.map(id => {
+        const m = TABS.find(t => t.id === id) || loginLabels[id];
+        return `<button class="nh-tab ${active===id?'active':''}" data-tab="${id}"><i class="ti ${m.icon}"></i>${m.label}</button>`;
+      }).join('')}
+      ${!authed ? `<p style="color:#8b8a7c;font-size:11px;line-height:1.5;padding:10px 8px 0;">Log in to unlock the rest of the hub.</p>` : ''}
+      <button class="nh-tab" id="switch-role-btn" style="margin-top:14px;border-top:1px solid rgba(255,255,255,0.12);padding-top:12px;"><i class="ti ti-arrow-left"></i>Switch account type</button>
+    `;
+    nav.querySelectorAll('.nh-tab[data-tab]').forEach(b => b.onclick = () => { active = b.dataset.tab; render(); });
+    const switchBtn = document.getElementById('switch-role-btn');
+    if (switchBtn) switchBtn.onclick = () => { role = null; render(); };
+    main.innerHTML = renderTab(active);
+    bindTab(active);
+  }
+
+  // ---------- Role gate ----------
+  function roleGateView() {
+    return `
+      <span class="nh-eyebrow">Welcome</span>
+      <h2>Who's logging in?</h2>
+      <p class="nh-lede">Pick an account type. NGOs go through verification before the hub unlocks; citizens and organizations get a quick login.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px;">
+        ${Object.entries(ROLE_META).map(([code, r]) => `
+          <button class="nh-card" data-role="${code}" style="text-align:left;cursor:pointer;border:1px solid var(--line);width:100%;background:#fff;font-family:inherit;color:inherit;">
+            <i class="ti ${r.icon}" style="font-size:22px;color:var(--indigo);"></i>
+            <h3 style="font-size:15px;margin-top:10px;">${r.label}</h3>
+            <p style="font-size:12.5px;color:#6b6a5f;margin-top:4px;line-height:1.5;">${r.desc}</p>
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+  function bindRoleGate() {
+    main.querySelectorAll('[data-role]').forEach(b => b.onclick = () => { role = b.dataset.role; active = preAuthTab(); render(); });
+  }
+
+  function citizenLoginView() {
+    const isReg = citizenMode === 'register';
+    const showOtp = isReg && citizenRegStep === 'otp';
+    return `
+      <span class="nh-eyebrow">Citizen access</span>
+      <h2>${showOtp ? 'Verify your phone number' : isReg ? 'Register as a citizen' : 'Citizen login'}</h2>
+      <p class="nh-lede">${showOtp ? `Enter the OTP sent to ${citizenPendingProfile ? citizenPendingProfile.phone : 'your phone'}.` : isReg ? 'A one-time code confirms your phone number so NGOs know who\'s donating.' : 'Enter the phone number you registered with.'}</p>
+      ${!showOtp ? `
+      <div style="display:flex;gap:6px;margin-top:12px;">
+        <button class="nh-btn ${isReg?'':'ghost'} mini" id="cz-mode-register">Register</button>
+        <button class="nh-btn ${!isReg?'':'ghost'} mini" id="cz-mode-login">Login</button>
+      </div>` : ''}
+      <div class="nh-card">
+        ${showOtp ? `
+          <div class="nh-field"><label>Enter OTP</label><input id="cz-otp-input" placeholder="6-digit code" maxlength="6"></div>
+          <p class="nh-note">Demo mode: no SMS gateway is connected, so the code is shown here instead of texted &mdash; it's <b>${citizenOtp}</b>. A production version would send this by SMS.</p>
+          <div style="display:flex;gap:8px;">
+            <button class="nh-btn" id="cz-otp-verify">Verify &amp; create account</button>
+            <button class="nh-btn ghost" id="cz-otp-back">Back</button>
+          </div>
+          ${citizenOtpError ? `<p class="nh-note" style="color:var(--coral);">${citizenOtpError}</p>` : ''}
+        ` : isReg ? `
+          <div class="nh-row">
+            <div class="nh-field"><label>Full name</label><input id="cz-name" placeholder="e.g. Ramesh Kumar"></div>
+            <div class="nh-field"><label>Phone number</label><input id="cz-phone" placeholder="e.g. 9876543210"></div>
+          </div>
+          <button class="nh-btn" id="cz-submit-btn">Send OTP</button>
+        ` : `
+          <div class="nh-field"><label>Phone number</label><input id="cz-login-phone" placeholder="e.g. 9876543210"></div>
+          <button class="nh-btn" id="cz-submit-btn">Login</button>
+        `}
+        ${!showOtp && citizenLoginError ? `<p class="nh-note" style="color:var(--coral);">${citizenLoginError}</p>` : ''}
+      </div>
+    `;
+  }
+  function bindCitizenLogin() {
+    if (citizenRegStep === 'otp') {
+      document.getElementById('cz-otp-verify').onclick = async () => {
+        const entered = document.getElementById('cz-otp-input').value.trim();
+        if (entered !== citizenOtp) { citizenOtpError = 'Incorrect OTP. Please try again.'; render(); return; }
+        const profile = citizenPendingProfile;
+        try { await window.storage.set('citizen:' + profile.phone, JSON.stringify(profile), false); } catch(e) {}
+        citizenProfile = profile;
+        citizenRegStep = 'form'; citizenOtp = null; citizenPendingProfile = null; citizenOtpError = '';
+        render();
+      };
+      document.getElementById('cz-otp-back').onclick = () => {
+        citizenRegStep = 'form'; citizenOtp = null; citizenPendingProfile = null; citizenOtpError = '';
+        render();
+      };
+      return;
+    }
+    document.getElementById('cz-mode-register').onclick = () => { citizenMode = 'register'; citizenLoginError=''; render(); };
+    document.getElementById('cz-mode-login').onclick = () => { citizenMode = 'login'; citizenLoginError=''; render(); };
+    document.getElementById('cz-submit-btn').onclick = async () => {
+      if (citizenMode === 'register') {
+        const name = document.getElementById('cz-name').value.trim();
+        const phone = document.getElementById('cz-phone').value.trim();
+        if (!name || !phone) { citizenLoginError = 'Enter both name and phone number.'; render(); return; }
+        citizenPendingProfile = { name, phone };
+        citizenOtp = String(Math.floor(100000 + Math.random() * 900000));
+        citizenOtpError = '';
+        citizenRegStep = 'otp';
+        render();
+      } else {
+        const phone = document.getElementById('cz-login-phone').value.trim();
+        if (!phone) { citizenLoginError = 'Enter your phone number.'; render(); return; }
+        try {
+          const r = await window.storage.get('citizen:' + phone, false);
+          citizenProfile = JSON.parse(r.value);
+          citizenLoginError = '';
+          render();
+        } catch(e) {
+          citizenLoginError = 'No account found for this number. Try registering instead.';
+          render();
+        }
+      }
+    };
+  }
+
+  function orgLoginView() {
+    const isReg = orgMode === 'register';
+    return `
+      <span class="nh-eyebrow">Organization access</span>
+      <h2>${isReg ? 'Register your organization' : 'Organization login'}</h2>
+      <p class="nh-lede">${isReg ? 'Companies and foundations register here to post CSR collaboration offers, jobs, events, and donations. Verification checks your details before the hub unlocks.' : 'Enter the email you registered with.'}</p>
+      ${isReg && orgProfile ? orgStatusBanner(orgProfile.status) : ''}
+      <div style="display:flex;gap:6px;margin-top:12px;">
+        <button class="nh-btn ${isReg?'':'ghost'} mini" id="og-mode-register">Register</button>
+        <button class="nh-btn ${!isReg?'':'ghost'} mini" id="og-mode-login">Login</button>
+      </div>
+      <div class="nh-card">
+        ${isReg ? `
+          <div class="nh-row">
+            <div class="nh-field"><label>Organization name</label><input id="og-name" value="${orgProfile?.name||''}" placeholder="e.g. Acme Foundation"></div>
+            <div class="nh-field"><label>Contact email</label><input id="og-email" value="${orgProfile?.email||''}" placeholder="e.g. csr@acme.com"></div>
+          </div>
+          <div class="nh-row">
+            <div class="nh-field"><label>Sector / focus</label><input id="og-sector" value="${orgProfile?.sector||''}" placeholder="e.g. Corporate CSR, education"></div>
+            <div class="nh-field"><label>Registration / CIN number</label><input id="og-regid" value="${orgProfile?.regid||''}" placeholder="e.g. U74999TG2015NPL098765"></div>
+          </div>
+          <button class="nh-btn" id="og-submit-btn">Submit for verification</button>
+          <p class="nh-note">Submissions go to the admin portal, where an AI check flags plausibility issues and a human admin makes the final call. A production version would also check against MCA/company registries.</p>
+        ` : `
+          <div class="nh-field"><label>Contact email</label><input id="og-login-email" placeholder="e.g. csr@acme.com"></div>
+          <button class="nh-btn" id="og-submit-btn">Login</button>
+        `}
+        ${orgLoginError ? `<p class="nh-note" style="color:var(--coral);">${orgLoginError}</p>` : ''}
+      </div>
+    `;
+  }
+  function orgStatusBanner(status) {
+    if (status === 'verified') return `<div class="nh-card" style="border-color:#c7d9c9;background:#f2f7f2;display:flex;justify-content:space-between;align-items:center;">
+      <div><h3 style="font-size:15px;">Access granted</h3><p class="nh-lede" style="margin-top:2px;">Your organization is verified. Explore collaboration, jobs, events, and donations.</p></div>
+      <span class="nh-badge verified"><i class="ti ti-check"></i>Verified</span></div>`;
+    if (status === 'pending') return `<div class="nh-card" style="border-color:var(--line);background:#fdfaf2;"><span class="nh-badge pending"><i class="ti ti-clock"></i>Pending review</span><p class="nh-lede" style="margin-top:8px;">Sent to the admin portal. An AI plausibility check plus a human admin review both happen before the hub unlocks — this can take a little time.</p></div>`;
+    if (status === 'rejected') return `<div class="nh-card" style="border-color:#e3c6bc;background:#fbf1ee;"><span class="nh-badge rejected"><i class="ti ti-x"></i>Needs correction</span><p class="nh-lede" style="margin-top:8px;">The admin reviewed this and asked for changes. Check that the organization name, a valid email, sector, and registration number are all filled in, then resubmit.</p></div>`;
+    return '';
+  }
+  function bindOrgLogin() {
+    document.getElementById('og-mode-register').onclick = () => { orgMode = 'register'; orgLoginError=''; render(); };
+    document.getElementById('og-mode-login').onclick = () => { orgMode = 'login'; orgLoginError=''; render(); };
+    document.getElementById('og-submit-btn').onclick = async () => {
+      if (orgMode === 'register') {
+        const name = document.getElementById('og-name').value.trim();
+        const email = document.getElementById('og-email').value.trim();
+        const sector = document.getElementById('og-sector').value.trim();
+        const regid = document.getElementById('og-regid').value.trim();
+        const emailLooksValid = /\S+@\S+\.\S+/.test(email);
+        const allFilled = name && email && sector && regid;
+        if (!allFilled) { orgLoginError = 'Please fill in every field before submitting.'; render(); return; }
+        if (!emailLooksValid) { orgLoginError = 'Enter a valid email address.'; render(); return; }
+        orgLoginError = '';
+        // Submissions are queued as pending — the admin portal's AI check and human review decide
+        // verified/rejected from here (see adminSetOrgStatus), not this form.
+        const profile = { name, email, sector, regid, status: 'pending' };
+        try {
+          await window.storage.set('org:' + email, JSON.stringify(profile), true);
+        } catch(e) { console.error(e); }
+        orgProfile = profile;
+        render();
+      } else {
+        const email = document.getElementById('og-login-email').value.trim();
+        if (!email) { orgLoginError = 'Enter your email.'; render(); return; }
+        try {
+          const r = await window.storage.get('org:' + email, true);
+          orgProfile = JSON.parse(r.value);
+          orgLoginError = '';
+          render();
+        } catch(e) {
+          orgLoginError = 'No account found for this email. Try registering instead.';
+          render();
+        }
+      }
+    };
+  }
+
+  // ---------- Admin ----------
+  function adminLoginView() {
+    return `
+      <span class="nh-eyebrow">Admin access</span>
+      <h2>NIVARA admin hub</h2>
+      <p class="nh-lede">Enter the admin passcode to review and verify NGO and organization submissions.</p>
+      <div class="nh-card">
+        <div class="nh-field"><label>Admin passcode</label><input id="admin-passcode" type="password" placeholder="Enter passcode"></div>
+        <button class="nh-btn" id="admin-login-btn">Enter admin hub</button>
+        <p class="nh-note">Demo passcode: <b>${ADMIN_PASSCODE}</b>. A production version would use real staff accounts with proper authentication, not a shared passcode.</p>
+        ${adminPasscodeError ? `<p class="nh-note" style="color:var(--coral);">${adminPasscodeError}</p>` : ''}
+      </div>
+    `;
+  }
+  function bindAdminLogin() {
+    document.getElementById('admin-login-btn').onclick = () => {
+      const val = document.getElementById('admin-passcode').value.trim();
+      if (val === ADMIN_PASSCODE) { adminAuthed = true; adminPasscodeError = ''; render(); }
+      else { adminPasscodeError = 'Incorrect passcode.'; render(); }
+    };
+  }
+  let adminNgoCache = null;
+  let adminOrgCache = null;
+  function maskBank(bank) {
+    if (!bank) return '—';
+    const clean = bank.replace(/\s+/g, '');
+    return clean.length > 4 ? '•••• ' + clean.slice(-4) : '••••';
+  }
+  async function aiAssessRecord(type, record) {
+    const label = type === 'ngo' ? 'NGO' : 'organization';
+    const fields = type === 'ngo'
+      ? { name: record.name, registration_number: record.reg, certificate_number: record.cert, year_established: record.year, area_of_work: record.area }
+      : { name: record.name, email: record.email, sector: record.sector, registration_or_cin: record.regid };
+    const sys = `You help a NIVARA hub admin do a first-pass plausibility check on a ${label} registration submission. You have no access to official registries (India's NGO Darpan, MCA, or income-tax exemption databases) — you can only judge internal consistency and plausibility of the text given, not confirm anything is real.
+Look for: placeholder or joke text, formats that don't resemble real Indian ${type === 'ngo' ? 'NGO registration / 12A-80G certificate' : 'company / CIN registration'} numbers, implausible dates, and vague descriptions with no concrete specifics.
+Respond with ONLY a JSON object, no markdown fences, no extra text:
+{"recommendation": "plausible" | "needs_more_info" | "red_flags", "reasoning": "one or two plain-language sentences for the admin"}
+Default to "needs_more_info" rather than "plausible" unless the submission is clearly complete and internally consistent. Never imply you checked this against a real government database — you didn't.`;
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 400,
+          system: sys,
+          messages: [{ role: 'user', content: JSON.stringify(fields, null, 2) }]
+        })
+      });
+      const data = await response.json();
+      const text = (data.content || []).map(c => c.text || '').join('\n');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+      if (!parsed.recommendation) throw new Error('unexpected shape');
+      return parsed;
+    } catch (e) {
+      return { recommendation: 'needs_more_info', reasoning: 'AI check could not complete — review manually.' };
+    }
+  }
+  function assessmentBlock(type, key, cache) {
+    const a = cache[key];
+    if (a === 'loading') return `<p class="nh-note" style="margin-top:8px;">Running AI check…</p>`;
+    if (!a) return `<button class="nh-btn ghost mini" data-ai-check="${key}" data-ai-type="${type}" style="margin-top:8px;">Run AI check</button>`;
+    const cls = a.recommendation === 'plausible' ? 'verified' : a.recommendation === 'red_flags' ? 'rejected' : 'pending';
+    const label = a.recommendation === 'plausible' ? 'AI: looks consistent' : a.recommendation === 'red_flags' ? 'AI: red flags' : 'AI: needs more info';
+    return `<div style="margin-top:8px;"><span class="nh-badge ${cls}">${label}</span><p class="nh-note" style="margin-top:4px;">${a.reasoning || ''}</p></div>`;
+  }
+  function adminNgoRow(n) {
+    return `<div class="nh-list-item">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+        <div>
+          <h4>${n.name || '(unnamed)'}</h4>
+          <p>${n.area || '—'} · est. ${n.year || '—'} · Reg no. ${n.reg || '—'}</p>
+          <p style="margin-top:2px;">Bank on file: ${maskBank(n.bank)}</p>
+        </div>
+        <span class="nh-badge ${n.status === 'verified' ? 'verified' : n.status === 'rejected' ? 'rejected' : 'pending'}">${n.status || 'pending'}</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="nh-btn mini" data-admin-ngo-verify="${n.key}" data-ngo-id="${n.id}">Verify</button>
+        <button class="nh-btn ghost mini" data-admin-ngo-reject="${n.key}" data-ngo-id="${n.id}">Reject</button>
+        <button class="nh-btn ghost mini" data-admin-ngo-pending="${n.key}" data-ngo-id="${n.id}">Mark pending</button>
+      </div>
+      ${assessmentBlock('ngo', n.key, adminNgoAssessments)}
+    </div>`;
+  }
+  function adminOrgRow(o) {
+    return `<div class="nh-list-item">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+        <div>
+          <h4>${o.name || '(unnamed)'}</h4>
+          <p>${o.sector || '—'} · ${o.email || '—'}</p>
+          <p style="margin-top:2px;">Reg/CIN: ${o.regid || '—'}</p>
+        </div>
+        <span class="nh-badge ${o.status === 'verified' ? 'verified' : o.status === 'rejected' ? 'rejected' : 'pending'}">${o.status || 'pending'}</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="nh-btn mini" data-admin-org-verify="${o.key}">Verify</button>
+        <button class="nh-btn ghost mini" data-admin-org-reject="${o.key}">Reject</button>
+        <button class="nh-btn ghost mini" data-admin-org-pending="${o.key}">Mark pending</button>
+      </div>
+      ${assessmentBlock('org', o.key, adminOrgAssessments)}
+    </div>`;
+  }
+  function adminHubView() {
+    const ngos = adminNgoCache || [];
+    const orgs = adminOrgCache || [];
+    const funders = adminFunderCache || [];
+    return `
+      <span class="nh-eyebrow">Admin</span>
+      <h2>NIVARA admin hub</h2>
+      <p class="nh-lede">Review every NGO and organization submission on the hub and set its verification status. This overrides the automatic demo checks.</p>
+      <div class="nh-stat-grid">
+        <div class="nh-stat"><b>${ngos.filter(n => n.status === 'verified').length}</b><span>NGOs verified</span></div>
+        <div class="nh-stat"><b>${ngos.filter(n => n.status !== 'verified').length}</b><span>NGOs pending/rejected</span></div>
+        <div class="nh-stat"><b>${orgs.filter(o => o.status === 'verified').length}</b><span>Orgs verified</span></div>
+        <div class="nh-stat"><b>${orgs.filter(o => o.status !== 'verified').length}</b><span>Orgs pending/rejected</span></div>
+      </div>
+      <h3 style="margin-top:22px;font-size:15px;">NGOs</h3>
+      ${ngos.length ? ngos.map(adminNgoRow).join('') : '<div class="nh-empty">No NGO submissions yet.</div>'}
+      <h3 style="margin-top:22px;font-size:15px;">Organizations</h3>
+      ${orgs.length ? orgs.map(adminOrgRow).join('') : '<div class="nh-empty">No organization submissions yet.</div>'}
+      <p class="nh-note">"Run AI check" is a first-pass plausibility read of the text fields only — it can't confirm anything against a real registry. Verify/Reject/Mark pending is always a human admin decision.</p>
+      <h3 style="margin-top:22px;font-size:15px;">Funder directory</h3>
+      <p class="nh-lede">NGOs match against this list from the "Funders &amp; applications" tab, where the AI agent drafts applications for them to review and send.</p>
+      ${funderAdminForm()}
+      ${funders.length ? funders.map(funderAdminRow).join('') : '<div class="nh-empty">No funders yet — add one above or load sample data to try the flow.</div>'}
+      <p class="nh-note">Demo note: this view reads submission records directly from the hub's shared storage since there's no separate backend here. In a real deployment, admin review should run against a private, access-controlled database — sensitive fields like bank details shouldn't be stored in client-readable shared storage at all, masking included. The funder directory is also demo data here; replace it with a real, vetted funder list before going live.</p>
+    `;
+  }
+  function funderAdminForm() {
+    return `<div class="nh-card">
+      <div class="nh-row">
+        <div class="nh-field"><label>Funder name</label><input id="fd-name" placeholder="e.g. Regional Education Trust"></div>
+        <div class="nh-field"><label>Region</label><input id="fd-region" placeholder="e.g. Telangana, national"></div>
+      </div>
+      <div class="nh-row">
+        <div class="nh-field"><label>Sector / focus keywords</label><input id="fd-sector" placeholder="e.g. education, girl child, livelihoods"></div>
+        <div class="nh-field"><label>Support type</label><input id="fd-type" placeholder="e.g. Grant, CSR, in-kind"></div>
+      </div>
+      <div class="nh-field"><label>Contact email</label><input id="fd-email" placeholder="e.g. grants@example.org"></div>
+      <div class="nh-field"><label>Notes</label><textarea id="fd-notes" placeholder="Eligibility notes, typical grant size, application process"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="nh-btn" id="fd-add-btn">Add funder</button>
+        <button class="nh-btn ghost mini" id="fd-seed-btn">Load sample funders (demo data)</button>
+      </div>
+    </div>`;
+  }
+  function funderAdminRow(f) {
+    return `<div class="nh-list-item">
+      <h4>${f.name}</h4>
+      <p>${f.sector || '—'} · ${f.region || '—'} · ${f.supportType || '—'}</p>
+      ${f.contactEmail ? `<p style="margin-top:2px;">${f.contactEmail}</p>` : ''}
+      ${f.notes ? `<p style="margin-top:2px;">${f.notes}</p>` : ''}
+      <button class="nh-btn ghost mini" data-fd-delete="${f.key}" style="margin-top:8px;">Remove</button>
+    </div>`;
+  }
+  const SAMPLE_FUNDERS = [
+    { name: 'Sample: Regional Education Trust', sector: 'education, literacy, school infrastructure', region: 'Telangana, Andhra Pradesh', supportType: 'Grant', contactEmail: 'grants@example.org', notes: 'Demo entry — replace with a real funder before going live.' },
+    { name: 'Sample: Rural Livelihoods Foundation', sector: 'livelihoods, skilling, agriculture', region: 'National', supportType: 'Grant + mentoring', contactEmail: 'apply@example.org', notes: 'Demo entry — replace with a real funder before going live.' },
+    { name: 'Sample: CSR Grants Consortium', sector: 'health, water and sanitation, child welfare', region: 'National', supportType: 'CSR grant', contactEmail: 'csr@example.org', notes: 'Demo entry — replace with a real funder before going live.' },
+  ];
+  async function seedSampleFunders() {
+    for (const f of SAMPLE_FUNDERS) {
+      await window.storage.set('funder:' + Date.now() + '_' + Math.random().toString(36).slice(2, 7), JSON.stringify(f), true).catch(() => {});
+    }
+    loadAdminData();
+  }
+  async function loadAdminData() {
+    try {
+      const ngoIdx = await window.storage.list('ngo:', true);
+      const ngos = [];
+      for (const k of (ngoIdx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) ngos.push({ key: k, ...JSON.parse(r.value) });
+      }
+      adminNgoCache = ngos.reverse();
+    } catch (e) { adminNgoCache = adminNgoCache || []; }
+    try {
+      const orgIdx = await window.storage.list('org:', true);
+      const orgs = [];
+      for (const k of (orgIdx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) orgs.push({ key: k, ...JSON.parse(r.value) });
+      }
+      adminOrgCache = orgs.reverse();
+    } catch (e) { adminOrgCache = adminOrgCache || []; }
+    try {
+      const fdIdx = await window.storage.list('funder:', true);
+      const fds = [];
+      for (const k of (fdIdx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) fds.push({ key: k, ...JSON.parse(r.value) });
+      }
+      adminFunderCache = fds.reverse();
+    } catch (e) { adminFunderCache = adminFunderCache || []; }
+    render();
+  }
+  async function adminSetNgoStatus(key, id, status) {
+    try {
+      const r = await window.storage.get(key, true);
+      const rec = JSON.parse(r.value);
+      rec.status = status;
+      await window.storage.set(key, JSON.stringify(rec), true);
+      if (status === 'verified') {
+        await window.storage.set('directory:' + id, JSON.stringify({ name: rec.name, area: rec.area, year: rec.year }), true);
+      } else {
+        await window.storage.delete('directory:' + id, true).catch(() => {});
+      }
+    } catch (e) { console.error(e); }
+    loadAdminData();
+  }
+  async function adminSetOrgStatus(key, status) {
+    try {
+      const r = await window.storage.get(key, true);
+      const rec = JSON.parse(r.value);
+      rec.status = status;
+      await window.storage.set(key, JSON.stringify(rec), true);
+    } catch (e) { console.error(e); }
+    loadAdminData();
+  }
+  function bindAdminHub() {
+    if (adminNgoCache === null || adminOrgCache === null || adminFunderCache === null) loadAdminData();
+    document.querySelectorAll('[data-admin-ngo-verify]').forEach(b => b.onclick = () => adminSetNgoStatus(b.dataset.adminNgoVerify, b.dataset.ngoId, 'verified'));
+    document.querySelectorAll('[data-admin-ngo-reject]').forEach(b => b.onclick = () => adminSetNgoStatus(b.dataset.adminNgoReject, b.dataset.ngoId, 'rejected'));
+    document.querySelectorAll('[data-admin-ngo-pending]').forEach(b => b.onclick = () => adminSetNgoStatus(b.dataset.adminNgoPending, b.dataset.ngoId, 'pending'));
+    document.querySelectorAll('[data-admin-org-verify]').forEach(b => b.onclick = () => adminSetOrgStatus(b.dataset.adminOrgVerify, 'verified'));
+    document.querySelectorAll('[data-admin-org-reject]').forEach(b => b.onclick = () => adminSetOrgStatus(b.dataset.adminOrgReject, 'rejected'));
+    document.querySelectorAll('[data-admin-org-pending]').forEach(b => b.onclick = () => adminSetOrgStatus(b.dataset.adminOrgPending, 'pending'));
+    document.querySelectorAll('[data-ai-check]').forEach(b => b.onclick = async () => {
+      const key = b.dataset.aiCheck;
+      const type = b.dataset.aiType;
+      const cache = type === 'ngo' ? adminNgoAssessments : adminOrgAssessments;
+      cache[key] = 'loading';
+      render();
+      const list = type === 'ngo' ? adminNgoCache : adminOrgCache;
+      const record = (list || []).find(r => r.key === key);
+      const result = record ? await aiAssessRecord(type, record) : { recommendation: 'needs_more_info', reasoning: 'Record not found.' };
+      cache[key] = result;
+      render();
+    });
+    document.querySelectorAll('[data-fd-delete]').forEach(b => b.onclick = async () => {
+      await window.storage.delete(b.dataset.fdDelete, true).catch(() => {});
+      loadAdminData();
+    });
+    const fdAdd = document.getElementById('fd-add-btn');
+    if (fdAdd) fdAdd.onclick = async () => {
+      const name = document.getElementById('fd-name').value.trim();
+      const region = document.getElementById('fd-region').value.trim();
+      const sector = document.getElementById('fd-sector').value.trim();
+      const supportType = document.getElementById('fd-type').value.trim();
+      const contactEmail = document.getElementById('fd-email').value.trim();
+      const notes = document.getElementById('fd-notes').value.trim();
+      if (!name) return;
+      await window.storage.set('funder:' + Date.now(), JSON.stringify({ name, region, sector, supportType, contactEmail, notes }), true).catch(() => {});
+      loadAdminData();
+    };
+    const fdSeed = document.getElementById('fd-seed-btn');
+    if (fdSeed) fdSeed.onclick = () => seedSampleFunders();
+  }
+
+  function renderTab(tab) {
+    if (tab === 'register') return registerView();
+    if (tab === 'citizen-login') return citizenLoginView();
+    if (tab === 'org-login') return orgLoginView();
+    if (tab === 'admin-login') return adminLoginView();
+    if (tab === 'admin-hub') return adminHubView();
+    if (tab === 'agent') return agentView();
+    if (tab === 'funders') return fundersView();
+    if (tab === 'donations') {
+      const notifHtml = (role === 'ngo' && isAuthed()) ? notifPanel() : '';
+      return notifHtml + listView('donations', 'Donation board', 'Citizens and organizations post items to donate, NGOs claim them for distribution.', donationForm());
+    }
+    if (tab === 'collab') return listView('collab', 'Organization collaboration', 'Companies and foundations post CSR partnerships NGOs can respond to.', collabForm());
+    if (tab === 'jobs') {
+      const lede = role === 'citizen'
+        ? 'Browse open roles and internships posted by NGOs and organizations, and apply directly.'
+        : 'Post open roles for volunteers, staff, and interns.';
+      const form = (role === 'ngo' || role === 'org') ? jobsForm() : '';
+      return listView('jobs', 'Jobs and internships', lede, form);
+    }
+    if (tab === 'events') return eventsView();
+    if (tab === 'directory') return directoryView();
+    return '';
+  }
+
+  // ---------- Registration & verification ----------
+  function registerView() {
+    const status = ngoProfile ? ngoProfile.status : null;
+    return `
+      <span class="nh-eyebrow">Step 1</span>
+      <h2>NGO registration and verification</h2>
+      <p class="nh-lede">Fill in your NGO's details. The verification service checks them before granting access to the AI agent and funding tools.</p>
+      ${status ? statusBanner(status) : ''}
+      <div class="nh-card">
+        <div class="nh-row">
+          <div class="nh-field"><label>NGO name</label><input id="f-name" value="${ngoProfile?.name||''}" placeholder="e.g. Prajwala Rural Trust"></div>
+          <div class="nh-field"><label>Registration number</label><input id="f-reg" value="${ngoProfile?.reg||''}" placeholder="e.g. TS/2019/00456"></div>
+        </div>
+        <div class="nh-row">
+          <div class="nh-field"><label>12A / 80G certificate no.</label><input id="f-cert" value="${ngoProfile?.cert||''}" placeholder="e.g. AAATN1234F"></div>
+          <div class="nh-field"><label>Year established</label><input id="f-year" value="${ngoProfile?.year||''}" placeholder="e.g. 2015"></div>
+        </div>
+        <div class="nh-field"><label>Area of work</label><input id="f-area" value="${ngoProfile?.area||''}" placeholder="e.g. Girl child education, Telangana"></div>
+        <div class="nh-field"><label>Bank account (for disbursement)</label><input id="f-bank" value="${ngoProfile?.bank||''}" placeholder="Account no. + IFSC"></div>
+        ${registerFormError ? `<p class="nh-note" style="color:var(--coral);">${registerFormError}</p>` : ''}
+        <button class="nh-btn" id="btn-verify">Submit for verification</button>
+        <p class="nh-note">Submissions go to the admin portal, where an AI check flags plausibility issues and a human admin makes the final call. A production version would also call the NGO Darpan registry and OCR-check uploaded certificates.</p>
+      </div>
+    `;
+  }
+  function statusBanner(status) {
+    if (status === 'verified') return `<div class="nh-card" style="border-color:#c7d9c9;background:#f2f7f2;display:flex;justify-content:space-between;align-items:center;">
+      <div><h3 style="font-size:15px;">Access granted</h3><p class="nh-lede" style="margin-top:2px;">Your NGO is verified. Open the AI agent tab to start a funding request.</p></div>
+      <span class="nh-badge verified"><i class="ti ti-check"></i>Verified</span></div>`;
+    if (status === 'pending') return `<div class="nh-card" style="border-color:var(--line);background:#fdfaf2;"><span class="nh-badge pending"><i class="ti ti-clock"></i>Pending review</span><p class="nh-lede" style="margin-top:8px;">Sent to the admin portal. An AI plausibility check plus a human admin review both happen before the AI agent and funder tools unlock — this can take a little time.</p></div>`;
+    if (status === 'rejected') return `<div class="nh-card" style="border-color:#e3c6bc;background:#fbf1ee;"><span class="nh-badge rejected"><i class="ti ti-x"></i>Needs correction</span><p class="nh-lede" style="margin-top:8px;">The admin reviewed this and asked for changes. Fix the details and resubmit.</p></div>`;
+    return '';
+  }
+  // NGO verification handling lives in bindRegister(), called from the main bindTab below.
+
+  // ---------- AI agent ----------
+  function agentView() {
+    if (!ngoProfile || ngoProfile.status !== 'verified') {
+      return `<span class="nh-eyebrow">Step 2</span><h2>AI funding agent</h2>
+      <div class="nh-empty"><i class="ti ti-lock" style="font-size:22px;display:block;margin-bottom:8px;"></i>Complete NGO registration and get verified first to unlock the agent.</div>`;
+    }
+    return `
+      <span class="nh-eyebrow">Step 2</span>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+        <div><h2>AI funding agent</h2><p class="nh-lede">Describe what funding you need in your own language, by text or voice. The agent gathers requirements and applies to matching schemes.</p></div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="nh-btn ghost mini" id="audio-toggle" title="Toggle spoken replies"><i class="ti ${audioOn?'ti-volume':'ti-volume-off'}"></i> ${audioOn?'Voice reply on':'Voice reply off'}</button>
+          <select class="nh-lang-select" id="lang-select">
+            ${Object.entries(LANGS).map(([code, l]) => `<option value="${code}" ${language===code?'selected':''}>${l.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="nh-card">
+        <div class="nh-chat-log" id="chat-log">${chatLog.map((m,i) => `<div class="nh-msg ${m.role}">${m.text}${m.role==='agent'?`<i class="ti ti-volume nh-replay" onclick="nhSpeak(${i})" style="margin-left:8px;cursor:pointer;opacity:0.6;"></i>`:''}</div>`).join('') || '<p class="nh-lede">Start by telling the agent what your NGO needs funding for.</p>'}</div>
+        <div class="nh-chat-input-row">
+          <button class="nh-mic-btn ${listening?'rec':''}" id="mic-btn"><i class="ti ti-microphone"></i></button>
+          <input id="chat-input" placeholder="Type or speak your funding request...">
+          <button class="nh-btn" id="send-btn">Send</button>
+        </div>
+        <p class="nh-note">${listening ? 'Listening... speak now.' : `Voice input and replies use ${LANGS[language].name}. Illiterate users can rely fully on the mic and spoken replies.`}</p>
+      </div>
+    `;
+  }
+  async function callAgent(userText) {
+    const sys = `You are a funding assistant for a verified NGO on the NIVARA hub. NGO profile: name=${ngoProfile.name}, area of work=${ngoProfile.area}, established=${ngoProfile.year}.
+
+Your job, in order:
+1. Ask short clarifying questions about the funding need — amount needed, purpose, number of beneficiaries, timeline — one or two questions per turn, not a long list at once.
+2. Once you have enough detail, summarize the request back in plain words and name only the general category of support it likely fits (e.g. "a state education grant" or "a CSR livelihood program"). Never invent or state a specific scheme name, exact eligibility rule, deadline, or funding amount — you have no live access to scheme databases, so any specific-sounding detail you produce would be a guess presented as fact.
+3. Once summarized, tell them to open the "Funders & applications" tab: they can describe the same need there, see funders from the hub's directory that match, and have AI draft an application for them to review and send themselves. Never say an application has already been "submitted," "filed," or "approved" from this chat — this chat only gathers requirements, it doesn't file anything on its own.
+4. Never ask for, or repeat back, bank account numbers, passwords, OTPs, or ID numbers. Registration already collected what's needed. If the user shares such details in chat anyway, tell them gently that it isn't needed here and they shouldn't share it in this chat.
+5. If a message is off-topic, respond briefly and kindly, then steer the conversation back to their funding need without lecturing.
+
+Style: short, warm, plain language, 2-3 sentences max — some users will hear this read aloud and may have limited literacy, so avoid jargon and complex sentence structure. Reply entirely in ${LANGS[language].name}.`;
+    const history = chatLog.map(m => ({ role: m.role === 'agent' ? 'assistant' : 'user', content: m.text }));
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1000,
+          system: sys,
+          messages: [...history, { role: 'user', content: userText }]
+        })
+      });
+      const data = await response.json();
+      const text = (data.content || []).map(c => c.text || '').join('\n') || "Sorry, I couldn't process that.";
+      return text;
+    } catch (e) {
+      return "Connection issue reaching the agent. Please try again.";
+    }
+  }
+  function bindAgent() {
+    document.getElementById('lang-select').onchange = (e) => { language = e.target.value; render(); };
+    document.getElementById('audio-toggle').onclick = () => { audioOn = !audioOn; render(); };
+    const input = document.getElementById('chat-input');
+    const send = async (overrideText) => {
+      const text = (overrideText !== undefined ? overrideText : input.value).trim();
+      if (!text) return;
+      chatLog.push({ role: 'user', text });
+      input.value = '';
+      render();
+      const log = document.getElementById('chat-log');
+      if (log) log.innerHTML += '<div class="nh-msg agent">…</div>';
+      const reply = await callAgent(text);
+      chatLog.push({ role: 'agent', text: reply });
+      render();
+      speakText(reply);
+    };
+    document.getElementById('send-btn').onclick = () => send();
+    input.onkeydown = (e) => { if (e.key === 'Enter') send(); };
+    const micBtn = document.getElementById('mic-btn');
+    micBtn.onclick = () => {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { alert('Voice input is not supported in this browser.'); return; }
+      const recog = new SR();
+      recog.lang = LANGS[language].speech;
+      recog.interimResults = false;
+      listening = true; render();
+      recog.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        send(transcript);
+      };
+      recog.onerror = () => { listening = false; render(); };
+      recog.onend = () => { listening = false; render(); };
+      recog.start();
+    };
+  }
+
+  // ---------- Funders & applications ----------
+  function escAttr(s) { return (s || '').replace(/"/g, '&quot;'); }
+  async function loadFunderDirectory() {
+    try {
+      const idx = await window.storage.list('funder:', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ key: k, ...JSON.parse(r.value) });
+      }
+      fundersDirCache = items.reverse();
+    } catch (e) { fundersDirCache = fundersDirCache || []; }
+    render();
+  }
+  function matchFunders(needText, sectorText, funders) {
+    const words = new Set([...normalizeWords(needText), ...normalizeWords(sectorText)]);
+    if (!words.size) return [];
+    const scored = (funders || []).map(f => {
+      const fWords = normalizeWords((f.sector || '') + ' ' + (f.region || '') + ' ' + (f.notes || ''));
+      let score = 0;
+      for (const w of fWords) if (words.has(w)) score++;
+      return { f, score };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+    return scored.map(x => x.f);
+  }
+  async function aiDraftApplication(funder, need) {
+    const sys = `You write a funding application email from an NGO to a potential funder, using only the facts given below — never invent registration numbers, past results, statistics, or partner names that weren't provided.
+NGO: name=${ngoProfile.name}, area of work=${ngoProfile.area}, established=${ngoProfile.year}.
+Funder: name=${funder.name}, focus=${funder.sector || '—'}, region=${funder.region || '—'}, support type=${funder.supportType || '—'}.
+Funding need described by the NGO: sector="${need.sector || ''}", amount="${need.amount || 'not specified'}", details="${need.need || ''}".
+Write a concise, professional application email (under 220 words). Use [brackets] as placeholders for anything the NGO must still attach or confirm (e.g. "[attach 12A/80G certificate]", "[confirm exact beneficiary count]"). Do not claim any outcome, approval, or existing relationship with the funder that hasn't happened.
+Respond with ONLY a JSON object, no markdown fences: {"subject": "...", "body": "..."}`;
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 800,
+          system: sys,
+          messages: [{ role: 'user', content: 'Draft the application email.' }]
+        })
+      });
+      const data = await response.json();
+      const text = (data.content || []).map(c => c.text || '').join('\n');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+      return { subject: parsed.subject || `Funding request — ${ngoProfile.name}`, body: parsed.body || '' };
+    } catch (e) {
+      return { subject: `Funding request — ${ngoProfile.name}`, body: 'Could not generate a draft automatically. Please write the application manually.' };
+    }
+  }
+  async function aiSearchFunders(need) {
+    const sys = `You help an Indian NGO find real, currently active government and private/CSR funding opportunities using web search. NGO context: name=${ngoProfile.name}, area of work=${ngoProfile.area}, established=${ngoProfile.year}, region hint from the description below.
+Funding need: sector="${need.sector || ''}", amount="${need.amount || 'not specified'}", details="${need.need || ''}".
+
+Search the web and only report programs you actually found. Never invent a scheme name, funder, deadline, or amount — if search turns up little, say so honestly instead of filling gaps.
+
+For each result, paraphrase in your own words (do not quote source text): name, whether it's "government" or "private" (CSR/foundation), region covered, a 1-2 sentence description of what it funds, how to apply, and the exact source URL.
+
+Respond with ONLY a JSON object, no markdown fences, no other text:
+{"results": [{"name":"...", "type":"government"|"private", "region":"...", "description":"...", "howToApply":"...", "sourceUrl":"..."}], "searchNote": "one honest sentence on how complete or uncertain this search was"}`;
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-6",
+          max_tokens: 1500,
+          system: sys,
+          messages: [{ role: 'user', content: 'Search for matching government and private funders now.' }],
+          tools: [{ type: "web_search_20250305", name: "web_search" }]
+        })
+      });
+      const data = await response.json();
+      const text = (data.content || []).map(c => c.text || '').join('\n');
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+      if (!Array.isArray(parsed.results)) throw new Error('unexpected shape');
+      return parsed;
+    } catch (e) {
+      return { results: [], searchNote: 'Live search failed or returned nothing usable — try again, or use the directory below.' };
+    }
+  }
+  async function draftApplicationForFunder(funder) {
+    const sector = document.getElementById('fn-sector')?.value.trim() || ngoProfile.area;
+    const amount = document.getElementById('fn-amount')?.value.trim() || '';
+    const need = document.getElementById('fn-need')?.value.trim() || '';
+    currentDraft = { funderKey: funder.key || null, funderName: funder.name, contactEmail: funder.contactEmail || '', sourceUrl: funder.sourceUrl || null, subject: '', body: '', drafting: true };
+    render();
+    const draft = await aiDraftApplication(funder, { sector, amount, need });
+    currentDraft = { ...currentDraft, ...draft, drafting: false };
+    render();
+  }
+  function draftApplicationFor(funderKey) {
+    const funder = (fundersDirCache || []).find(f => f.key === funderKey);
+    if (!funder) return;
+    return draftApplicationForFunder(funder);
+  }
+  async function logApplication(status) {
+    if (!currentDraft || !ngoProfile) return;
+    const rec = { funderKey: currentDraft.funderKey, funderName: currentDraft.funderName, subject: currentDraft.subject, body: currentDraft.body, sourceUrl: currentDraft.sourceUrl || null, status, date: new Date().toISOString() };
+    try {
+      await window.storage.set('applications:' + ngoProfile.id + ':' + Date.now(), JSON.stringify(rec), true);
+    } catch (e) { console.error(e); }
+    currentDraft = null;
+    loadMyApplications();
+  }
+  async function loadMyApplications() {
+    if (!ngoProfile) { myApplicationsCache = []; render(); return; }
+    try {
+      const idx = await window.storage.list('applications:' + ngoProfile.id + ':', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ key: k, ...JSON.parse(r.value) });
+      }
+      myApplicationsCache = items.reverse();
+    } catch (e) { myApplicationsCache = myApplicationsCache || []; }
+    render();
+  }
+  const APP_STATUS_LABELS = {
+    sent: 'Sent',
+    responded_interested: 'Funder responded — interested',
+    responded_declined: 'Funder responded — declined',
+    funds_received: 'Funds received',
+  };
+  async function updateApplicationStatus(key, status) {
+    try {
+      const r = await window.storage.get(key, true);
+      const rec = JSON.parse(r.value);
+      rec.status = status;
+      await window.storage.set(key, JSON.stringify(rec), true);
+    } catch (e) { console.error(e); }
+    loadMyApplications();
+  }
+  function appRow(a) {
+    const cls = a.status === 'funds_received' ? 'verified' : a.status === 'responded_declined' ? 'rejected' : 'pending';
+    return `<div class="nh-list-item">
+      <h4>${a.funderName}</h4>
+      <p>${a.subject || ''}</p>
+      ${a.sourceUrl ? `<p style="margin-top:2px;"><a href="${a.sourceUrl}" target="_blank" rel="noopener">${a.sourceUrl}</a></p>` : ''}
+      <span class="nh-badge ${cls}" style="margin-top:6px;display:inline-flex;">${APP_STATUS_LABELS[a.status] || 'Drafted'}</span>
+      <div style="margin-top:8px;">
+        <select class="nh-field-inline app-status-select" data-app-key="${a.key}" style="font-size:12px;padding:5px 8px;border-radius:6px;border:1px solid var(--line);font-family:'Public Sans',sans-serif;">
+          ${Object.entries(APP_STATUS_LABELS).map(([code, lbl]) => `<option value="${code}" ${a.status === code ? 'selected' : ''}>${lbl}</option>`).join('')}
+        </select>
+      </div>
+      <p class="nh-note" style="margin-top:4px;">Update this yourself once you hear back — the hub can't detect a funder's reply or a bank transfer automatically.</p>
+    </div>`;
+  }
+  function draftPanel() {
+    const d = currentDraft;
+    if (d.drafting) return `<div class="nh-card"><p class="nh-lede">Drafting application to ${d.funderName}…</p></div>`;
+    return `
+      <div class="nh-card" style="border-color:var(--marigold);background:#fdf8ee;">
+        <span class="nh-eyebrow" style="color:var(--marigold);">Draft to ${d.funderName}</span>
+        ${d.sourceUrl ? `<p class="nh-note" style="margin-top:4px;">Found at: <a href="${d.sourceUrl}" target="_blank" rel="noopener">${d.sourceUrl}</a> — check it for the correct application process before sending.</p>` : ''}
+        <div class="nh-field" style="margin-top:8px;"><label>Funder email (fill in if blank — check their site for the right address)</label><input id="draft-to" value="${escAttr(d.contactEmail)}" placeholder="e.g. grants@funder.org"></div>
+        <div class="nh-field"><label>Subject</label><input id="draft-subject" value="${escAttr(d.subject)}"></div>
+        <div class="nh-field"><label>Body</label><textarea id="draft-body" style="min-height:160px;">${d.body}</textarea></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="nh-btn" id="draft-send-btn">Send application (opens your email app)</button>
+          <button class="nh-btn ghost mini" id="draft-discard">Discard draft</button>
+        </div>
+        <p class="nh-note">Review before sending — the AI draft may need edits, and you should attach your registration/12A-80G certificates as your email client allows.</p>
+      </div>
+    `;
+  }
+  function fundersView() {
+    if (!ngoProfile || ngoProfile.status !== 'verified') {
+      return `<span class="nh-eyebrow">Step 3</span><h2>Funders &amp; applications</h2>
+      <div class="nh-empty"><i class="ti ti-lock" style="font-size:22px;display:block;margin-bottom:8px;"></i>Complete NGO registration and get verified first to unlock this tab.</div>`;
+    }
+    const matches = fundersMatchCache;
+    return `
+      <span class="nh-eyebrow">Step 3</span>
+      <h2>Funders &amp; applications</h2>
+      <p class="nh-lede">Describe what you need. The agent can search the live web for real government and private/CSR funders, or match against the hub's own directory — either way, it drafts the application for you to review and send.</p>
+      <div class="nh-card">
+        <div class="nh-row">
+          <div class="nh-field"><label>Sector / keywords</label><input id="fn-sector" value="${escAttr(ngoProfile.area || '')}" placeholder="e.g. girl child education"></div>
+          <div class="nh-field"><label>Amount needed</label><input id="fn-amount" placeholder="e.g. ₹2,00,000"></div>
+        </div>
+        <div class="nh-field"><label>What's it for?</label><textarea id="fn-need" placeholder="Briefly describe the funding need, beneficiaries, timeline"></textarea></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="nh-btn" id="fn-search-btn"${liveFundersLoading ? ' disabled' : ''}>${liveFundersLoading ? 'Searching the web…' : 'Search live for funders'}</button>
+          <button class="nh-btn ghost" id="fn-match-btn">Match against hub directory</button>
+        </div>
+        ${fundersMatchNotice ? `<p class="nh-note" style="margin-top:8px;">${fundersMatchNotice}</p>` : ''}
+      </div>
+      ${liveFundersCache ? `
+        <h3 style="margin-top:20px;font-size:15px;">Live search results</h3>
+        ${liveFundersNotice ? `<p class="nh-note">${liveFundersNotice}</p>` : ''}
+        ${liveFundersCache.length ? liveFundersCache.map((f, i) => `
+          <div class="nh-list-item">
+            <h4>${f.name}</h4>
+            <p>${f.type === 'government' ? 'Government' : 'Private / CSR'} · ${f.region || '—'}</p>
+            ${f.description ? `<p style="margin-top:2px;">${f.description}</p>` : ''}
+            ${f.howToApply ? `<p style="margin-top:2px;"><b>How to apply:</b> ${f.howToApply}</p>` : ''}
+            ${f.sourceUrl ? `<p style="margin-top:2px;"><a href="${f.sourceUrl}" target="_blank" rel="noopener">${f.sourceUrl}</a></p>` : ''}
+            <button class="nh-btn mini" data-draft-live="${i}" style="margin-top:8px;">Draft application</button>
+          </div>
+        `).join('') : '<div class="nh-empty">No live matches found. Try rephrasing the need, or check the directory below.</div>'}
+        <p class="nh-note">AI web search — verify eligibility and deadlines on the funder's own site before applying; details can be out of date or incomplete.</p>
+      ` : ''}
+      ${matches ? `
+        <h3 style="margin-top:20px;font-size:15px;">${matches.length ? 'Matched from hub directory' : 'No directory matches'}</h3>
+        ${matches.length ? matches.map(f => `
+          <div class="nh-list-item">
+            <h4>${f.name}</h4>
+            <p>${f.sector || '—'} · ${f.region || '—'} · ${f.supportType || '—'}</p>
+            ${f.notes ? `<p style="margin-top:2px;">${f.notes}</p>` : ''}
+            <button class="nh-btn mini" data-draft-funder="${f.key}" style="margin-top:8px;">Draft application</button>
+          </div>
+        `).join('') : '<div class="nh-empty">No funders in the directory match this yet. The hub team adds funders as partnerships are set up.</div>'}
+      ` : ''}
+      ${currentDraft ? draftPanel() : ''}
+      <h3 style="margin-top:22px;font-size:15px;">My applications</h3>
+      ${(myApplicationsCache && myApplicationsCache.length) ? myApplicationsCache.map(appRow).join('') : '<div class="nh-empty">No applications sent yet.</div>'}
+      <p class="nh-note">Demo note: applications are AI-drafted from your profile and the description above, but nothing is auto-submitted or auto-paid — this hub can't log into government/private portals on your behalf (each uses a different form, login, and process), and it has no payment integration to receive funds automatically. "Send" opens your own email app with the draft filled in, so sending stays a deliberate, reviewable action, and any funder reply or fund transfer is something you record here yourself once it actually happens.</p>
+    `;
+  }
+  function bindFunders() {
+    if (fundersDirCache === null) loadFunderDirectory();
+    if (myApplicationsCache === null) loadMyApplications();
+    const matchBtn = document.getElementById('fn-match-btn');
+    if (matchBtn) matchBtn.onclick = () => {
+      const sector = document.getElementById('fn-sector').value.trim();
+      const need = document.getElementById('fn-need').value.trim();
+      if (!need) { fundersMatchNotice = 'Describe the funding need first.'; render(); return; }
+      fundersMatchNotice = '';
+      fundersMatchCache = matchFunders(need, sector, fundersDirCache);
+      render();
+    };
+    const searchBtn = document.getElementById('fn-search-btn');
+    if (searchBtn) searchBtn.onclick = async () => {
+      const sector = document.getElementById('fn-sector').value.trim();
+      const amount = document.getElementById('fn-amount').value.trim();
+      const need = document.getElementById('fn-need').value.trim();
+      if (!need) { fundersMatchNotice = 'Describe the funding need first.'; render(); return; }
+      fundersMatchNotice = '';
+      liveFundersLoading = true;
+      render();
+      const result = await aiSearchFunders({ sector, amount, need });
+      liveFundersCache = result.results || [];
+      liveFundersNotice = result.searchNote || '';
+      liveFundersLoading = false;
+      render();
+    };
+    document.querySelectorAll('[data-draft-funder]').forEach(b => b.onclick = () => draftApplicationFor(b.dataset.draftFunder));
+    document.querySelectorAll('[data-draft-live]').forEach(b => b.onclick = () => draftApplicationForFunder(liveFundersCache[+b.dataset.draftLive]));
+    document.querySelectorAll('.app-status-select').forEach(sel => sel.onchange = (e) => updateApplicationStatus(sel.dataset.appKey, e.target.value));
+    if (currentDraft && !currentDraft.drafting) {
+      const toInput = document.getElementById('draft-to');
+      const subjInput = document.getElementById('draft-subject');
+      const bodyInput = document.getElementById('draft-body');
+      if (toInput) toInput.oninput = (e) => { currentDraft.contactEmail = e.target.value; };
+      if (subjInput) subjInput.oninput = (e) => { currentDraft.subject = e.target.value; };
+      if (bodyInput) bodyInput.oninput = (e) => { currentDraft.body = e.target.value; };
+      const sendBtn = document.getElementById('draft-send-btn');
+      if (sendBtn) sendBtn.onclick = async () => {
+        const mailto = `mailto:${encodeURIComponent(currentDraft.contactEmail || '')}?subject=${encodeURIComponent(currentDraft.subject || '')}&body=${encodeURIComponent(currentDraft.body || '')}`;
+        window.open(mailto, '_blank');
+        await logApplication('sent');
+      };
+      const discardBtn = document.getElementById('draft-discard');
+      if (discardBtn) discardBtn.onclick = () => { currentDraft = null; render(); };
+    }
+  }
+
+  // ---------- Shared list modules (food / collab / jobs) ----------
+  const listConfig = {
+    donations: { prefix: 'donations', empty: 'No donations posted yet.' },
+    collab: { prefix: 'collab', empty: 'No collaboration offers posted yet.' },
+    jobs: { prefix: 'jobs', empty: 'No open roles posted yet.' },
+  };
+  const DONATION_CATEGORIES = {
+    food: { label: 'Food', hint: 'e.g. 40 cooked meal packets, rice sacks' },
+    books: { label: 'Books', hint: 'e.g. School textbooks and reference books' },
+    clothes: { label: 'Clothes', hint: 'e.g. Winter wear, children\u2019s garments' },
+    computers: { label: 'Computers', hint: 'e.g. Laptops, monitors, keyboards' },
+    medical: { label: 'Medical equipment', hint: 'e.g. Wheelchairs, braces, thermometers' },
+    furniture: { label: 'Furniture', hint: 'e.g. Desks, blackboard tables' },
+    stationery: { label: 'Stationery', hint: 'e.g. Pencils, notebooks, geometry boxes' },
+  };
+  let listCache = {};
+  let donationFilter = 'all';
+  let donationNotice = '';
+  let notifyCache = null;
+  let appliedJobKeys = new Set();
+  let jobApplyNotice = '';
+  async function loadMyApplications() {
+    if (!citizenProfile) return;
+    try {
+      const idx = await window.storage.list('jobapp:' + citizenProfile.phone + ':', false);
+      appliedJobKeys = new Set((idx?.keys || []).map(k => k.slice(('jobapp:' + citizenProfile.phone + ':').length)));
+    } catch (e) { /* no applications yet */ }
+  }
+
+  // ---------- Nearest-NGO matching ----------
+  function normalizeWords(s) {
+    return (s || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(w => w.length > 2);
+  }
+  function findNearestNgo(locationText, ngoList) {
+    const locWords = new Set(normalizeWords(locationText));
+    if (!locWords.size) return null;
+    let best = null, bestScore = 0;
+    for (const ngo of (ngoList || [])) {
+      const areaWords = normalizeWords(ngo.area);
+      let score = 0;
+      for (const w of areaWords) if (locWords.has(w)) score++;
+      if (score > bestScore) { bestScore = score; best = ngo; }
+    }
+    return bestScore > 0 ? best : null;
+  }
+  async function loadDirectoryData() {
+    try {
+      const idx = await window.storage.list('directory:', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ id: k.slice('directory:'.length), ...JSON.parse(r.value) });
+      }
+      directoryCache = items;
+    } catch (e) { directoryCache = directoryCache || []; }
+    return directoryCache;
+  }
+  async function ensureNgoDirectory() {
+    if (directoryCache) return directoryCache;
+    return loadDirectoryData();
+  }
+  async function loadNotifications() {
+    if (!ngoProfile) { notifyCache = []; return; }
+    try {
+      const idx = await window.storage.list('notify:' + ngoProfile.id + ':', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ key: k, ...JSON.parse(r.value) });
+      }
+      notifyCache = items.reverse();
+    } catch (e) { notifyCache = notifyCache || []; }
+    render();
+  }
+  function notifPanel() {
+    const items = notifyCache || [];
+    if (!items.length) return '';
+    return `<div class="nh-card" style="border-color:var(--marigold);background:#fdf8ee;">
+      <span class="nh-eyebrow" style="color:var(--marigold);">Nearby match</span>
+      <h3 style="font-size:14.5px;margin-top:2px;">${items.length} donation${items.length > 1 ? 's' : ''} matched near your NGO</h3>
+      ${items.map(n => `<div class="nh-list-item"><h4>${n.title}</h4><p>Pickup: ${n.loc}</p><button class="nh-btn ghost mini" data-notif-dismiss="${n.key}" style="margin-top:8px;">Dismiss</button></div>`).join('')}
+    </div>`;
+  }
+  function listView(key, title, lede, formHtml) {
+    let items = listCache[key] || [];
+    let filterHtml = '';
+    if (key === 'donations') {
+      if (donationFilter !== 'all') items = items.filter(it => it.category === donationFilter);
+      filterHtml = `<div class="nh-field" style="max-width:240px;margin-top:14px;">
+        <label>Filter by category</label>
+        <select id="donation-filter">
+          <option value="all">All categories</option>
+          ${Object.entries(DONATION_CATEGORIES).map(([code, c]) => `<option value="${code}" ${donationFilter===code?'selected':''}>${c.label}</option>`).join('')}
+        </select>
+      </div>`;
+    }
+    return `
+      <span class="nh-eyebrow">Community feature</span>
+      <h2>${title}</h2>
+      <p class="nh-lede">${lede}</p>
+      ${formHtml}
+      ${filterHtml}
+      ${key === 'jobs' && jobApplyNotice ? `<p class="nh-note" style="color:var(--moss);margin-top:10px;">${jobApplyNotice}</p>` : ''}
+      <div id="list-items-${key}">
+        ${items.length ? items.map(it => renderListItem(it, key)).join('') : `<div class="nh-empty">${listConfig[key].empty}</div>`}
+      </div>
+    `;
+  }
+  function renderListItem(it, listKey) {
+    const badge = it.category && DONATION_CATEGORIES[it.category]
+      ? `<span class="nh-badge verified" style="margin-bottom:6px;display:inline-flex;">${DONATION_CATEGORIES[it.category].label}</span><br>`
+      : '';
+    const matchLine = it.matchedNgoName ? `<p style="margin-top:4px;font-size:11.5px;color:var(--moss);">Nearest match: ${it.matchedNgoName}</p>` : '';
+    let applyLine = '';
+    if (listKey === 'jobs' && role === 'citizen' && citizenProfile && it.key) {
+      const already = appliedJobKeys.has(it.key);
+      applyLine = already
+        ? `<span class="nh-badge verified" style="margin-top:8px;display:inline-flex;"><i class="ti ti-check"></i>Applied</span>`
+        : `<button class="nh-btn mini" data-apply-job="${it.key}" data-job-title="${escAttr(it.title)}" style="margin-top:8px;">Apply</button>`;
+    }
+    const postedLine = it.postedBy ? `<p style="margin-top:4px;font-size:11.5px;color:#9a9888;">Posted by ${it.postedBy}</p>` : '';
+    return `<div class="nh-list-item">${badge}<h4>${it.title}</h4><p>${it.body}</p>${matchLine}${postedLine}${applyLine}</div>`;
+  }
+  function donationForm() {
+    const firstCat = Object.keys(DONATION_CATEGORIES)[0];
+    return `<div class="nh-card">
+      ${donationNotice ? `<p class="nh-note" style="color:var(--moss);margin-top:0;margin-bottom:10px;">${donationNotice}</p>` : ''}
+      <div class="nh-row">
+      <div class="nh-field"><label>Category</label>
+        <select id="don-cat">
+          ${Object.entries(DONATION_CATEGORIES).map(([code, c]) => `<option value="${code}">${c.label}</option>`).join('')}
+        </select>
+      </div>
+      <div class="nh-field"><label>Pickup location</label><input id="don-loc" placeholder="e.g. Uppal, Hyderabad"></div>
+      </div>
+      <div class="nh-field"><label>Item and quantity</label><input id="don-item" placeholder="${DONATION_CATEGORIES[firstCat].hint}"></div>
+      <button class="nh-btn" id="don-post">Post donation</button></div>`;
+  }
+  function collabForm() {
+    return `<div class="nh-card"><div class="nh-row">
+      <div class="nh-field"><label>Organization name</label><input id="collab-org" placeholder="e.g. Acme Foundation"></div>
+      <div class="nh-field"><label>Collaboration type</label><input id="collab-type" placeholder="e.g. CSR grant, volunteering"></div>
+      </div><div class="nh-field"><label>Details</label><textarea id="collab-body" placeholder="What kind of NGOs are you looking to partner with?"></textarea></div>
+      <button class="nh-btn" id="collab-post">Post offer</button></div>`;
+  }
+  function jobsForm() {
+    return `<div class="nh-card"><div class="nh-row">
+      <div class="nh-field"><label>Role title</label><input id="jobs-title" placeholder="e.g. Field coordinator"></div>
+      <div class="nh-field"><label>Type</label><input id="jobs-type" placeholder="e.g. Internship, 3 months"></div>
+      </div><div class="nh-field"><label>Description</label><textarea id="jobs-body" placeholder="Responsibilities and requirements"></textarea></div>
+      <button class="nh-btn" id="jobs-post">Post opening</button></div>`;
+  }
+
+  // ---------- Events (organizations host, verified NGOs collaborate) ----------
+  let eventsCache = null;
+  let eventNotice = '';
+  function eventForm() {
+    const ngos = directoryCache || [];
+    return `<div class="nh-card">
+      ${eventNotice ? `<p class="nh-note" style="color:var(--moss);margin-top:0;margin-bottom:10px;">${eventNotice}</p>` : ''}
+      <div class="nh-row">
+        <div class="nh-field"><label>Event title</label><input id="ev-title" placeholder="e.g. Community health camp"></div>
+        <div class="nh-field"><label>Date</label><input id="ev-date" type="date"></div>
+      </div>
+      <div class="nh-field"><label>Location</label><input id="ev-loc" placeholder="e.g. Community hall, Uppal"></div>
+      <div class="nh-field"><label>Description</label><textarea id="ev-body" placeholder="What's the event, and what kind of NGO collaboration are you looking for?"></textarea></div>
+      <div class="nh-field"><label>Invite verified NGOs to collaborate</label>
+        <div style="display:flex;flex-direction:column;gap:6px;max-height:140px;overflow-y:auto;border:1px solid var(--line);border-radius:6px;padding:8px;background:#fdfcf9;">
+          ${ngos.length ? ngos.map(n => `<label style="font-size:12.5px;display:flex;gap:6px;align-items:center;"><input type="checkbox" class="ev-invite-check" value="${n.id}" data-name="${n.name}"> ${n.name} (${n.area})</label>`).join('') : '<span style="font-size:12px;color:#9a9888;">No verified NGOs on the hub yet.</span>'}
+        </div>
+      </div>
+      <button class="nh-btn" id="ev-post">Post event</button>
+    </div>`;
+  }
+  function renderEventItem(ev) {
+    const invited = ev.invited || [];
+    const confirmed = ev.confirmed || [];
+    const isInvitedNgo = role === 'ngo' && ngoProfile && invited.some(i => i.id === ngoProfile.id);
+    const alreadyConfirmed = role === 'ngo' && ngoProfile && confirmed.includes(ngoProfile.id);
+    const confirmedNames = invited.filter(i => confirmed.includes(i.id)).map(i => i.name);
+    return `<div class="nh-list-item">
+      <h4>${ev.title}</h4>
+      <p>${ev.date ? ev.date + ' · ' : ''}${ev.location}</p>
+      ${ev.body ? `<p style="margin-top:4px;">${ev.body}</p>` : ''}
+      <p style="margin-top:6px;font-size:11.5px;color:#9a9888;">Hosted by ${ev.hostOrgName}${invited.length ? ' · Invited: ' + invited.map(i => i.name).join(', ') : ''}</p>
+      ${confirmedNames.length ? `<p style="margin-top:4px;font-size:11.5px;color:var(--moss);">Collaborating: ${confirmedNames.join(', ')}</p>` : ''}
+      ${isInvitedNgo ? (alreadyConfirmed
+        ? `<span class="nh-badge verified" style="margin-top:8px;display:inline-flex;"><i class="ti ti-check"></i>You're collaborating</span>`
+        : `<button class="nh-btn mini" data-confirm-event="${ev.key}" style="margin-top:8px;">Confirm collaboration</button>`) : ''}
+    </div>`;
+  }
+  function eventsView() {
+    const items = eventsCache || [];
+    const isOrg = role === 'org';
+    return `
+      <span class="nh-eyebrow">Community feature</span>
+      <h2>Events</h2>
+      <p class="nh-lede">${isOrg ? 'Host an event and invite verified NGOs to collaborate on it.' : 'Verified NGOs can confirm collaboration on events organizations invite them to.'}</p>
+      ${isOrg ? eventForm() : ''}
+      <div id="events-items">
+        ${items.length ? items.map(renderEventItem).join('') : '<div class="nh-empty">No events posted yet.</div>'}
+      </div>
+    `;
+  }
+  async function loadEvents() {
+    try {
+      const idx = await window.storage.list('events:', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ key: k, ...JSON.parse(r.value) });
+      }
+      eventsCache = items.reverse();
+    } catch(e) { eventsCache = eventsCache || []; }
+    render();
+  }
+  function bindEvents() {
+    if (eventsCache === null) loadEvents();
+    if (role === 'org') {
+      if (directoryCache === null) loadDirectoryData().then(() => render());
+      const btn = document.getElementById('ev-post');
+      if (btn) btn.onclick = async () => {
+        const title = document.getElementById('ev-title').value.trim();
+        const date = document.getElementById('ev-date').value;
+        const loc = document.getElementById('ev-loc').value.trim();
+        const body = document.getElementById('ev-body').value.trim();
+        if (!title || !loc) return;
+        const invited = Array.from(document.querySelectorAll('.ev-invite-check:checked')).map(c => ({ id: c.value, name: c.dataset.name }));
+        const rec = { title, date, location: loc, body, hostOrgName: orgProfile.name, hostOrgEmail: orgProfile.email, invited, confirmed: [] };
+        await window.storage.set('events:' + Date.now(), JSON.stringify(rec), true);
+        eventNotice = invited.length
+          ? `Event posted and ${invited.length} NGO${invited.length > 1 ? 's' : ''} invited to collaborate.`
+          : 'Event posted. No NGOs invited yet — select some next time to line up collaborators.';
+        loadEvents();
+      };
+    }
+    document.querySelectorAll('[data-confirm-event]').forEach(b => b.onclick = async () => {
+      const key = b.dataset.confirmEvent;
+      try {
+        const r = await window.storage.get(key, true);
+        const ev = JSON.parse(r.value);
+        ev.confirmed = ev.confirmed || [];
+        if (!ev.confirmed.includes(ngoProfile.id)) ev.confirmed.push(ngoProfile.id);
+        await window.storage.set(key, JSON.stringify(ev), true);
+        loadEvents();
+      } catch(e) { console.error(e); }
+    });
+  }
+  async function loadList(key) {
+    try {
+      const idx = await window.storage.list(listConfig[key].prefix + ':', true);
+      const items = [];
+      for (const k of (idx?.keys || [])) {
+        const r = await window.storage.get(k, true).catch(() => null);
+        if (r) items.push({ key: k, ...JSON.parse(r.value) });
+      }
+      listCache[key] = items.reverse();
+      if (key === 'jobs' && role === 'citizen' && citizenProfile) await loadMyApplications();
+    } catch(e) { listCache[key] = listCache[key] || []; }
+    render();
+  }
+  function bindTab(tab) {
+    if (tab === 'register') bindRegister();
+    if (tab === 'citizen-login') bindCitizenLogin();
+    if (tab === 'org-login') bindOrgLogin();
+    if (tab === 'admin-login') bindAdminLogin();
+    if (tab === 'admin-hub') bindAdminHub();
+    if (tab === 'agent') bindAgent();
+    if (tab === 'funders') bindFunders();
+    if (tab === 'donations') bindList('donations');
+    if (tab === 'collab') bindList('collab');
+    if (tab === 'jobs') bindList('jobs');
+    if (tab === 'events') bindEvents();
+    if (tab === 'directory') loadDirectory();
+  }
+  function bindRegister() {
+    document.getElementById('btn-verify').onclick = async () => {
+      const name = document.getElementById('f-name').value.trim();
+      const reg = document.getElementById('f-reg').value.trim();
+      const cert = document.getElementById('f-cert').value.trim();
+      const year = document.getElementById('f-year').value.trim();
+      const area = document.getElementById('f-area').value.trim();
+      const bank = document.getElementById('f-bank').value.trim();
+      if (!(name && reg && cert && year && area && bank)) {
+        registerFormError = 'Please fill in every field before submitting.';
+        render();
+        return;
+      }
+      registerFormError = '';
+      // Submissions are queued as pending — the admin portal's AI check and human review decide
+      // verified/rejected from here (see adminSetNgoStatus), not this form.
+      ngoProfile = { name, reg, cert, year, area, bank, status: 'pending', id: 'ngo_' + Date.now() };
+      try {
+        await window.storage.set('ngo:' + ngoProfile.id, JSON.stringify(ngoProfile), true);
+      } catch(e) { console.error(e); }
+      render();
+    };
+  }
+  function bindList(key) {
+    if (!listCache[key]) loadList(key);
+    if (key === 'donations' && role === 'ngo' && isAuthed()) {
+      if (notifyCache === null) loadNotifications();
+      document.querySelectorAll('[data-notif-dismiss]').forEach(b => b.onclick = async () => {
+        await window.storage.delete(b.dataset.notifDismiss, true).catch(() => {});
+        loadNotifications();
+      });
+    }
+    if (key === 'donations') {
+      const catSelect = document.getElementById('don-cat');
+      const itemInput = document.getElementById('don-item');
+      if (catSelect && itemInput) {
+        catSelect.onchange = () => { itemInput.placeholder = DONATION_CATEGORIES[catSelect.value].hint; };
+      }
+      const filterSelect = document.getElementById('donation-filter');
+      if (filterSelect) filterSelect.onchange = (e) => { donationFilter = e.target.value; render(); };
+      const btn = document.getElementById('don-post');
+      if (btn) btn.onclick = async () => {
+        const category = document.getElementById('don-cat').value;
+        const item = document.getElementById('don-item').value.trim();
+        const loc = document.getElementById('don-loc').value.trim();
+        if (!item || !loc) return;
+        const ngos = await ensureNgoDirectory();
+        const match = findNearestNgo(loc, ngos);
+        const rec = { category, title: item, body: 'Pickup at ' + loc, matchedNgoName: match ? match.name : null };
+        await window.storage.set('donations:' + Date.now(), JSON.stringify(rec), true);
+        if (match) {
+          await window.storage.set('notify:' + match.id + ':' + Date.now(), JSON.stringify({ title: item, loc }), true).catch(() => {});
+          donationNotice = `Nearest match notified: ${match.name}. They'll see it the next time they check the donation board.`;
+        } else {
+          donationNotice = 'Posted. No verified NGO in that area yet, so it stays visible to every NGO on the hub.';
+        }
+        loadList('donations');
+      };
+    }
+    if (key === 'collab') {
+      const btn = document.getElementById('collab-post');
+      if (btn) btn.onclick = async () => {
+        const org = document.getElementById('collab-org').value.trim();
+        const type = document.getElementById('collab-type').value.trim();
+        const body = document.getElementById('collab-body').value.trim();
+        if (!org || !type) return;
+        const rec = { title: org + ' — ' + type, body };
+        await window.storage.set('collab:' + Date.now(), JSON.stringify(rec), true);
+        loadList('collab');
+      };
+    }
+    if (key === 'jobs') {
+      const btn = document.getElementById('jobs-post');
+      if (btn) btn.onclick = async () => {
+        const title = document.getElementById('jobs-title').value.trim();
+        const type = document.getElementById('jobs-type').value.trim();
+        const body = document.getElementById('jobs-body').value.trim();
+        if (!title) return;
+        const postedBy = (role === 'ngo' ? ngoProfile?.name : orgProfile?.name) || null;
+        const rec = { title: title + ' (' + type + ')', body, postedBy };
+        await window.storage.set('jobs:' + Date.now(), JSON.stringify(rec), true);
+        loadList('jobs');
+      };
+    }
+    if (key === 'jobs' && role === 'citizen' && citizenProfile) {
+      document.querySelectorAll('[data-apply-job]').forEach(b => b.onclick = async () => {
+        const jobKey = b.dataset.applyJob;
+        const jobTitle = b.dataset.jobTitle;
+        const rec = { jobKey, jobTitle, applicantName: citizenProfile.name, applicantPhone: citizenProfile.phone, appliedAt: Date.now() };
+        try {
+          await window.storage.set('jobapp:' + citizenProfile.phone + ':' + jobKey, JSON.stringify(rec), false);
+          appliedJobKeys.add(jobKey);
+          jobApplyNotice = `Applied to "${jobTitle}". This is saved to your account. Note: this demo doesn't yet have a shared employer inbox, so the NGO/organization won't automatically see it — that would need a small backend to connect the two sides.`;
+        } catch (e) { jobApplyNotice = 'Could not record the application — please try again.'; }
+        render();
+      });
+    }
+  }
+
+  // ---------- Directory ----------
+  let directoryCache = null;
+  function directoryView() {
+    const items = directoryCache || [];
+    return `
+      <span class="nh-eyebrow">Public feature</span>
+      <h2>Public NGO directory</h2>
+      <p class="nh-lede">Every verified NGO on the hub, visible to citizens, organizations, and funders.</p>
+      <div class="nh-stat-grid">
+        <div class="nh-stat"><b>${items.length}</b><span>Verified on this hub</span></div>
+        <div class="nh-stat"><b>${new Set(items.map(i=>i.area)).size || 0}</b><span>Focus areas on hub</span></div>
+        <div class="nh-stat"><b>1.87L</b><span>Registered nationally*</span></div>
+        <div class="nh-stat"><b>28</b><span>States and UTs covered*</span></div>
+      </div>
+      <p class="nh-note">*National figures are from the government's NGO Darpan (NITI Aayog) portal, approximately 1,87,395 registered NGOs as of its last public count. Estimates vary by source and year, ranging from about 1.87 lakh to over 5 lakh depending on methodology — the hub numbers above (verified on this hub) are the only ones this platform can confirm directly.</p>
+      <div id="directory-items">
+        ${items.length ? items.map(i => `<div class="nh-list-item"><h4>${i.name}</h4><p>${i.area} · est. ${i.year}</p></div>`).join('') : '<div class="nh-empty">No verified NGOs yet. Register one to see it listed here.</div>'}
+      </div>
+    `;
+  }
+  async function loadDirectory() {
+    await loadDirectoryData();
+    render();
+  }
+
+  render();
+})();
+</script>

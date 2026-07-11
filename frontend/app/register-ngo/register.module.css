@@ -1,0 +1,243 @@
+.container {
+  padding: 60px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.wizardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.wizardHeader::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--line);
+  z-index: 1;
+}
+
+.stepIndicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13.5px;
+  z-index: 2;
+  transition: var(--transition);
+  color: #6b6a5f;
+}
+
+.stepIndicatorActive {
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: var(--white);
+}
+
+.stepIndicatorCompleted {
+  background: var(--moss);
+  border-color: var(--moss);
+  color: var(--white);
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+}
+
+.sectionTitle {
+  font-size: 24px;
+  color: var(--indigo-deep);
+  margin-bottom: 8px;
+}
+
+.sectionSubtitle {
+  font-size: 14.5px;
+  color: #6b6a5f;
+  margin-bottom: 30px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.formFieldFull {
+  grid-column: span 2;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #555447;
+}
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  background: #fdfcf9;
+  color: var(--ink);
+  transition: var(--transition);
+}
+
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--indigo);
+  background: var(--white);
+}
+
+.field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Upload zone */
+.uploadGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.uploadBox {
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  text-align: center;
+  background: #fdfcf9;
+  transition: var(--transition);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.uploadBox:hover {
+  border-color: var(--indigo);
+  background: rgba(34, 56, 90, 0.01);
+}
+
+.uploadIcon {
+  color: #9a9888;
+  margin-bottom: 4px;
+}
+
+.uploadBoxTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--indigo-deep);
+}
+
+.uploadBoxDesc {
+  font-size: 12px;
+  color: #9a9888;
+}
+
+.uploadedFile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  background: var(--moss-light);
+  color: var(--moss);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Actions footer */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 11px 22px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnPrimary {
+  background: var(--indigo);
+  color: var(--white);
+}
+
+.btnPrimary:hover {
+  background: var(--indigo-deep);
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--indigo-deep);
+  border: 1px solid var(--line);
+}
+
+.btnGhost:hover {
+  background: rgba(34, 56, 90, 0.03);
+}
+
+.btnDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.alert {
+  background: var(--coral-light);
+  color: var(--coral);
+  border: 1px solid #e5b8af;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 30px 20px;
+  }
+  .card {
+    padding: 24px;
+  }
+  .formGrid, .uploadGrid {
+    grid-template-columns: 1fr;
+  }
+  .formFieldFull {
+    grid-column: span 1;
+  }
+}

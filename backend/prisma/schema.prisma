@@ -1,0 +1,204 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  role          String         // NGO, CITIZEN, ORG, ADMIN
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  ngo           NGO?
+  citizen       Citizen?
+  organization  Organization?
+  notifications Notification[]
+}
+
+model NGO {
+  id               String        @id @default(uuid())
+  userId           String        @unique
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Organization Details
+  name             String
+  regNumber        String
+  regType          String        // Trust, Society, Section 8 Company, etc.
+  category         String        // Education, Health, Livelihoods, etc.
+  yearEstablished  Int
+  website          String?
+  address          String
+  state            String
+  district         String
+  pinCode          String
+  
+  // Contact Details
+  founderName      String
+  email            String
+  mobile           String
+  language         String        @default("en")
+  
+  // Funding Details
+  annualBudget     String
+  currentFunding   String
+  fundingNeeded    String
+  
+  // Status
+  status           String        @default("PENDING") // PENDING, APPROVED, REJECTED
+  rejectionReason  String?
+  
+  documents        Document[]
+  applications     Application[]
+  messages         Message[]
+  donations        Donation[]
+  jobs             Job[]
+  
+  // AI Verification
+  readinessScore         Int?          @default(30)
+  verificationSummary    String?
+  missingDocs            String?
+  improvementSuggestions String?
+  
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Citizen {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Organization {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  sector          String
+  regid           String   @unique
+  status          String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  rejectionReason String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Donation {
+  id             String   @id @default(uuid())
+  category       String   // FOOD, BOOKS, CLOTHES, etc.
+  title          String
+  pickupLocation String
+  postedBy       String   // Name of citizen/org
+  status         String   @default("PENDING") // PENDING, CLAIMED
+  matchedNgoId   String?
+  matchedNgo     NGO?     @relation(fields: [matchedNgoId], references: [id], onDelete: SetNull)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Event {
+  id            String    @id @default(uuid())
+  title         String
+  date          String?
+  location      String
+  description   String?
+  hostOrgName   String
+  invitedNgos   String    // Comma-separated list of NGO IDs
+  confirmedNgos String    // Comma-separated list of NGO IDs
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Job {
+  id           String           @id @default(uuid())
+  title        String
+  type         String           // Full-time, Part-time, Internship
+  description  String?
+  postedBy     String           // Name of NGO or Org
+  ngoId        String?
+  ngo          NGO?             @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+  applications JobApplication[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model JobApplication {
+  id             String   @id @default(uuid())
+  jobId          String
+  job            Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applicantName  String
+  applicantPhone String
+  createdAt      DateTime @default(now())
+}
+
+model Document {
+  id        String   @id @default(uuid())
+  ngoId     String
+  ngo       NGO      @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+  name      String   // Original filename
+  type      String   // REG_CERT, PAN, TRUST_CERT, ANNUAL_REPORT, FINANCIAL_REPORT, PHOTO
+  url       String   // Relative URL/path to locally saved file
+  createdAt DateTime @default(now())
+}
+
+model Grant {
+  id                String        @id @default(uuid())
+  name              String
+  provider          String
+  type              String        // CSR, Government, Foundation
+  sector            String        // Education, Healthcare, Environment, etc.
+  state             String        // National or specific state name
+  minimumFunding    Int
+  maximumFunding    Int
+  deadline          String
+  eligibility       String
+  requiredDocuments String        // Comma-separated required documents
+  description       String
+  applyUrl          String?
+  applications      Application[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model Application {
+  id            String   @id @default(uuid())
+  ngoId         String
+  ngo           NGO      @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+  grantId       String?
+  grant         Grant?   @relation(fields: [grantId], references: [id], onDelete: SetNull)
+  title         String
+  subject       String?
+  body          String?
+  status        String   // DRAFT, SENT, RESPONDED_INTERESTED, RESPONDED_DECLINED, FUNDS_RECEIVED
+  appliedAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  ngoId     String
+  ngo       NGO      @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+  role      String   // user, agent
+  text      String
+  createdAt DateTime @default(now())
+}
+
+
